@@ -3,10 +3,13 @@ import api, { imgUrl } from '../../api/client';
 import ProductModal from './ProductModal';
 import { WhatsAppIcon, InstagramIcon } from './Icons';
 
+const POR_PAGINA = 12;
+
 export default function Products({ settings }) {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [filtro, setFiltro] = useState('');
+  const [pagina, setPagina] = useState(1);
   const [seleccionado, setSeleccionado] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +20,17 @@ export default function Products({ settings }) {
       .finally(() => setLoading(false));
   }, []);
 
+  // Al cambiar filtro, volver a página 1
+  const cambiarFiltro = (id) => { setFiltro(id); setPagina(1); };
+
   const visibles = filtro ? productos.filter((p) => p.categoria?._id === filtro) : productos;
+  const totalPaginas = Math.ceil(visibles.length / POR_PAGINA);
+  const paginados = visibles.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+
+  const irAPagina = (n) => {
+    setPagina(n);
+    document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <section id="productos" className="bg-brand-dark py-20">
@@ -33,7 +46,7 @@ export default function Products({ settings }) {
           {/* Filtro por categoría */}
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setFiltro('')}
+              onClick={() => cambiarFiltro('')}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${!filtro ? 'bg-brand-yellow text-black' : 'border border-brand-border text-gray-300 hover:border-brand-yellow'}`}
             >
               Todos
@@ -41,7 +54,7 @@ export default function Products({ settings }) {
             {categorias.map((c) => (
               <button
                 key={c._id}
-                onClick={() => setFiltro(c._id)}
+                onClick={() => cambiarFiltro(c._id)}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${filtro === c._id ? 'bg-brand-yellow text-black' : 'border border-brand-border text-gray-300 hover:border-brand-yellow'}`}
               >
                 {c.nombre}
@@ -55,51 +68,83 @@ export default function Products({ settings }) {
         ) : visibles.length === 0 ? (
           <p className="mt-10 text-gray-400">No hay productos publicados en esta categoría.</p>
         ) : (
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {visibles.map((p) => (
-              <button
-                key={p._id}
-                onClick={() => setSeleccionado(p)}
-                className="group flex h-[340px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow"
-              >
-                {/* Imagen — altura fija */}
-                <div className="flex h-40 w-full shrink-0 items-center justify-center bg-black/40 p-3">
-                  {p.imagen ? (
-                    <img
-                      src={imgUrl(p.imagen)}
-                      alt={p.nombre}
-                      loading="lazy"
-                      className="h-full w-full object-contain transition group-hover:scale-105"
-                    />
-                  ) : (
-                    <span className="text-5xl" aria-hidden="true">📦</span>
-                  )}
-                </div>
+          <>
+            {/* Contador */}
+            <p className="mt-6 text-sm text-gray-400">
+              Mostrando {(pagina - 1) * POR_PAGINA + 1}–{Math.min(pagina * POR_PAGINA, visibles.length)} de {visibles.length} productos
+            </p>
 
-                {/* Contenido */}
-                <div className="flex flex-1 flex-col p-4">
-                  {/* Título + subtítulo: máx 2 líneas */}
-                  <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug">
-                    {p.nombre}{p.subtitulo ? ` — ${p.subtitulo}` : ''}
-                  </h3>
+            {/* Grid */}
+            <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {paginados.map((p) => (
+                <button
+                  key={p._id}
+                  onClick={() => setSeleccionado(p)}
+                  className="group flex h-[340px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow"
+                >
+                  {/* Imagen — altura fija */}
+                  <div className="flex h-40 w-full shrink-0 items-center justify-center bg-black/40 p-3">
+                    {p.imagen ? (
+                      <img
+                        src={imgUrl(p.imagen)}
+                        alt={p.nombre}
+                        loading="lazy"
+                        className="h-full w-full object-contain transition group-hover:scale-105"
+                      />
+                    ) : (
+                      <span className="text-5xl" aria-hidden="true">📦</span>
+                    )}
+                  </div>
 
-                  {/* Especificaciones: máx 3, truncadas */}
-                  {p.especificaciones?.length > 0 && (
-                    <ul className="mt-2 flex-1 space-y-0.5 overflow-hidden text-xs text-gray-400">
-                      {p.especificaciones.slice(0, 3).map((e, i) => (
-                        <li key={i} className="truncate">• {e}</li>
-                      ))}
-                    </ul>
-                  )}
+                  {/* Contenido */}
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug">
+                      {p.nombre}{p.subtitulo ? ` — ${p.subtitulo}` : ''}
+                    </h3>
+                    {p.especificaciones?.length > 0 && (
+                      <ul className="mt-2 flex-1 space-y-0.5 overflow-hidden text-xs text-gray-400">
+                        {p.especificaciones.slice(0, 3).map((e, i) => (
+                          <li key={i} className="truncate">• {e}</li>
+                        ))}
+                      </ul>
+                    )}
+                    <span className="btn-yellow mt-auto justify-center py-2 text-sm">Ver más</span>
+                  </div>
+                </button>
+              ))}
+            </div>
 
-                  {/* Botón siempre al fondo */}
-                  <span className="btn-yellow mt-auto justify-center py-2 text-sm">
-                    Ver más
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
+            {/* Paginación */}
+            {totalPaginas > 1 && (
+              <div className="mt-10 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => irAPagina(pagina - 1)}
+                  disabled={pagina === 1}
+                  className="rounded-lg border border-brand-border px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30"
+                >
+                  ← Anterior
+                </button>
+
+                {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => irAPagina(n)}
+                    className={`h-9 w-9 rounded-lg text-sm font-medium transition ${n === pagina ? 'bg-brand-yellow text-black' : 'border border-brand-border text-gray-300 hover:border-brand-yellow hover:text-brand-yellow'}`}
+                  >
+                    {n}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => irAPagina(pagina + 1)}
+                  disabled={pagina === totalPaginas}
+                  className="rounded-lg border border-brand-border px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30"
+                >
+                  Siguiente →
+                </button>
+              </div>
+            )}
+          </>
         )}
 
         {/* Banner: sin ventas online */}
