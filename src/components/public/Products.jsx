@@ -20,7 +20,6 @@ export default function Products({ settings }) {
       .finally(() => setLoading(false));
   }, []);
 
-  // Al cambiar filtro, volver a página 1
   const cambiarFiltro = (id) => { setFiltro(id); setPagina(1); };
 
   const visibles = filtro ? productos.filter((p) => p.categoria?._id === filtro) : productos;
@@ -74,16 +73,16 @@ export default function Products({ settings }) {
               Mostrando {(pagina - 1) * POR_PAGINA + 1}–{Math.min(pagina * POR_PAGINA, visibles.length)} de {visibles.length} productos
             </p>
 
-            {/* Grid */}
-            <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Grid — 2 columnas en mobile, 3 en tablet, 4 en desktop */}
+            <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
               {paginados.map((p) => (
                 <button
                   key={p._id}
                   onClick={() => setSeleccionado(p)}
-                  className="group flex h-[340px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow"
+                  className="group flex h-[300px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow sm:h-[340px]"
                 >
                   {/* Imagen — altura fija */}
-                  <div className="flex h-40 w-full shrink-0 items-center justify-center bg-black/40 p-3">
+                  <div className="flex h-36 w-full shrink-0 items-center justify-center bg-black/40 p-3 sm:h-40">
                     {p.imagen ? (
                       <img
                         src={imgUrl(p.imagen)}
@@ -92,23 +91,25 @@ export default function Products({ settings }) {
                         className="h-full w-full object-contain transition group-hover:scale-105"
                       />
                     ) : (
-                      <span className="text-5xl" aria-hidden="true">📦</span>
+                      <span className="text-4xl sm:text-5xl" aria-hidden="true">📦</span>
                     )}
                   </div>
 
                   {/* Contenido */}
-                  <div className="flex flex-1 flex-col p-4">
-                    <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug">
+                  <div className="flex flex-1 flex-col p-3 sm:p-4">
+                    <h3 className="line-clamp-2 font-display text-xs font-bold leading-snug sm:text-sm">
                       {p.nombre}{p.subtitulo ? ` — ${p.subtitulo}` : ''}
                     </h3>
                     {p.especificaciones?.length > 0 && (
-                      <ul className="mt-2 flex-1 space-y-0.5 overflow-hidden text-xs text-gray-400">
+                      <ul className="mt-1 flex-1 space-y-0.5 overflow-hidden text-xs text-gray-400">
                         {p.especificaciones.slice(0, 3).map((e, i) => (
                           <li key={i} className="truncate">• {e}</li>
                         ))}
                       </ul>
                     )}
-                    <span className="btn-yellow mt-auto justify-center py-2 text-sm">Ver más</span>
+                    <span className="btn-yellow mt-auto justify-center py-1.5 text-xs sm:py-2 sm:text-sm">
+                      Ver más
+                    </span>
                   </div>
                 </button>
               ))}
@@ -120,7 +121,7 @@ export default function Products({ settings }) {
                 <button
                   onClick={() => irAPagina(pagina - 1)}
                   disabled={pagina === 1}
-                  className="rounded-lg border border-brand-border px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30"
+                  className="rounded-lg border border-brand-border px-3 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30 sm:px-4"
                 >
                   ← Anterior
                 </button>
@@ -138,7 +139,7 @@ export default function Products({ settings }) {
                 <button
                   onClick={() => irAPagina(pagina + 1)}
                   disabled={pagina === totalPaginas}
-                  className="rounded-lg border border-brand-border px-4 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30"
+                  className="rounded-lg border border-brand-border px-3 py-2 text-sm font-medium text-gray-300 transition hover:border-brand-yellow hover:text-brand-yellow disabled:opacity-30 sm:px-4"
                 >
                   Siguiente →
                 </button>
@@ -149,14 +150,14 @@ export default function Products({ settings }) {
 
         {/* Banner: sin ventas online */}
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-brand-yellow px-6 py-4 text-black">
-          <p className="flex items-center gap-3 font-semibold">
-            <WhatsAppIcon className="h-6 w-6" />
+          <p className="flex items-center gap-3 text-sm font-semibold sm:text-base">
+            <WhatsAppIcon className="h-6 w-6 shrink-0" />
             No contamos con ventas online ni carrito de compras. Consultas y presupuestos por WhatsApp o Instagram.
           </p>
           <a
             href={`https://instagram.com/${settings?.instagram || ''}`}
             target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 font-semibold text-white"
+            className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white"
           >
             <InstagramIcon /> @{settings?.instagram}
           </a>
