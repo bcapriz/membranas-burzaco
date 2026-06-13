@@ -11,7 +11,6 @@ const features = [
 export default function Hero({ settings }) {
   return (
     <section id="inicio" className="relative overflow-hidden">
-      {/* Foto real de obra con overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/img/hero-bg.jpg')" }}
@@ -19,25 +18,28 @@ export default function Hero({ settings }) {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/60" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-32">
-        {/* Título responsive: más chico en mobile para que entre */}
-        <h1 className="max-w-3xl font-display text-3xl font-black uppercase leading-tight sm:text-4xl md:text-6xl">
-          Soluciones en{' '}
-          <span className="text-brand-yellow">membranas</span>
-          <br className="hidden sm:block" />
-          {' '} impermeabilizantes
+      <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
+        {/* Título: dos versiones — mobile y desktop */}
+        <h1 className="font-display font-black uppercase leading-tight">
+          <span className="block text-2xl sm:hidden">
+            Soluciones en <span className="text-brand-yellow">membranas</span> e impermeabilización
+          </span>
+          <span className="hidden text-4xl sm:block md:text-6xl">
+            Soluciones en <span className="text-brand-yellow">membranas</span>
+            <br />e impermeabilización
+          </span>
         </h1>
 
         <p className="mt-4 max-w-xl text-sm text-gray-300 sm:mt-6 sm:text-lg">
           Protegemos techos y estructuras con materiales de primera calidad y mano de obra especializada.
         </p>
 
-        {/* Botones: apilados en mobile, en fila en sm+ */}
-        <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-          <a href={waLink(settings)} target="_blank" rel="noreferrer" className="btn-yellow justify-center sm:justify-start">
+        {/* Botones */}
+        <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
+          <a href={waLink(settings)} target="_blank" rel="noreferrer" className="btn-yellow justify-center">
             <WhatsAppIcon /> Consultar por WhatsApp
           </a>
-          <a href="#productos" className="btn-outline justify-center sm:justify-start">
+          <a href="#productos" className="btn-outline justify-center">
             Ver productos
           </a>
         </div>
