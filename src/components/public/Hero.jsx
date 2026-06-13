@@ -18,15 +18,14 @@ export default function Hero({ settings }) {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/85 to-black/60" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-32">
-        {/* Título: dos versiones — mobile y desktop */}
+      <div className="relative mx-auto max-w-7xl px-4 py-32 md:py-52">
         <h1 className="font-display font-black uppercase leading-tight">
           <span className="block text-2xl sm:hidden">
-            Soluciones en <span className="text-brand-yellow">membranas</span> e impermeabilización
+            Soluciones en <span className="text-brand-yellow">membranas</span> impermeabilizantes
           </span>
           <span className="hidden text-4xl sm:block md:text-6xl">
             Soluciones en <span className="text-brand-yellow">membranas</span>
-            <br />e impermeabilización
+            <br />impermeabilizantes
           </span>
         </h1>
 
@@ -34,7 +33,6 @@ export default function Hero({ settings }) {
           Protegemos techos y estructuras con materiales de primera calidad y mano de obra especializada.
         </p>
 
-        {/* Botones */}
         <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
           <a href={waLink(settings)} target="_blank" rel="noreferrer" className="btn-yellow justify-center">
             <WhatsAppIcon /> Consultar por WhatsApp
