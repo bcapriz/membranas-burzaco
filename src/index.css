@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { @apply font-body bg-brand-dark text-white antialiased; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+}
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  animation: marquee 55s linear infinite;
+}
+.marquee-container:hover .marquee-group { animation-play-state: paused; }
+
+@layer components {
+  .btn-yellow {
+    @apply inline-flex items-center gap-2 rounded-lg bg-brand-yellow px-5 py-3 font-semibold text-black transition hover:brightness-110;
+  }
+  .btn-outline {
+    @apply inline-flex items-center gap-2 rounded-lg border border-brand-yellow px-5 py-3 font-semibold text-brand-yellow transition hover:bg-brand-yellow hover:text-black;
+  }
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.2em] text-brand-yellow;
+  }
+}
