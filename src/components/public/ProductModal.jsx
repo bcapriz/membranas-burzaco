@@ -4,15 +4,18 @@ import { WhatsAppIcon, CloseIcon } from './Icons';
 
 export default function ProductModal({ producto, settings, onClose }) {
   // Cerrar con Escape y bloquear el scroll del body
-  useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && onClose();
-    document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
+useEffect(() => {
+  const onKey = (e) => e.key === 'Escape' && onClose();
+  document.addEventListener('keydown', onKey);
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = 'hidden';
+  document.body.style.paddingRight = `${scrollbarWidth}px`;
+  return () => {
+    document.removeEventListener('keydown', onKey);
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  };
+}, [onClose]);
 
   if (!producto) return null;
   const nombreCompleto = `${producto.nombre}${producto.subtitulo ? ' ' + producto.subtitulo : ''}`;
