@@ -3,8 +3,6 @@ import api, { imgUrl } from '../../api/client';
 import ProductModal from './ProductModal';
 import { WhatsAppIcon, InstagramIcon } from './Icons';
 
-const POR_PAGINA = 12;
-
 export default function Products({ settings }) {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -12,6 +10,18 @@ export default function Products({ settings }) {
   const [pagina, setPagina] = useState(1);
   const [seleccionado, setSeleccionado] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [porPagina, setPorPagina] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
+  );
+
+  useEffect(() => {
+    const handleResize = () => setPorPagina(window.innerWidth < 640 ? 6 : 12);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Resetear página cuando cambia porPagina
+  useEffect(() => { setPagina(1); }, [porPagina]);
 
   useEffect(() => {
     Promise.all([api.get('/api/products'), api.get('/api/categories')])
@@ -23,8 +33,8 @@ export default function Products({ settings }) {
   const cambiarFiltro = (id) => { setFiltro(id); setPagina(1); };
 
   const visibles = filtro ? productos.filter((p) => p.categoria?._id === filtro) : productos;
-  const totalPaginas = Math.ceil(visibles.length / POR_PAGINA);
-  const paginados = visibles.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+  const totalPaginas = Math.ceil(visibles.length / porPagina);
+  const paginados = visibles.slice((pagina - 1) * porPagina, pagina * porPagina);
 
   const irAPagina = (n) => {
     setPagina(n);
@@ -70,7 +80,7 @@ export default function Products({ settings }) {
           <>
             {/* Contador */}
             <p className="mt-6 text-sm text-gray-400">
-              Mostrando {(pagina - 1) * POR_PAGINA + 1}–{Math.min(pagina * POR_PAGINA, visibles.length)} de {visibles.length} productos
+              Mostrando {(pagina - 1) * porPagina + 1}–{Math.min(pagina * porPagina, visibles.length)} de {visibles.length} productos
             </p>
 
             {/* Grid — 2 columnas en mobile, 3 en tablet, 4 en desktop */}
@@ -81,7 +91,7 @@ export default function Products({ settings }) {
                   onClick={() => setSeleccionado(p)}
                   className="group flex h-[300px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow sm:h-[340px]"
                 >
-                  {/* Imagen — altura fija */}
+                  {/* Imagen */}
                   <div className="flex h-36 w-full shrink-0 items-center justify-center bg-black/40 p-3 sm:h-40">
                     {p.imagen ? (
                       <img
