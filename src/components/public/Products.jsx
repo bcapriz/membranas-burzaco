@@ -60,24 +60,42 @@ export default function Products({ settings }) {
               <button
                 key={p._id}
                 onClick={() => setSeleccionado(p)}
-                className="group flex flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow"
+                className="group flex h-[340px] flex-col overflow-hidden rounded-xl border border-brand-border bg-brand-panel text-left transition hover:-translate-y-1 hover:border-brand-yellow"
               >
-                <div className="flex h-44 items-center justify-center bg-black/40 p-4">
+                {/* Imagen — altura fija */}
+                <div className="flex h-40 w-full shrink-0 items-center justify-center bg-black/40 p-3">
                   {p.imagen ? (
-                    <img src={imgUrl(p.imagen)} alt={p.nombre} loading="lazy" className="max-h-36 object-contain transition group-hover:scale-105" />
+                    <img
+                      src={imgUrl(p.imagen)}
+                      alt={p.nombre}
+                      loading="lazy"
+                      className="h-full w-full object-contain transition group-hover:scale-105"
+                    />
                   ) : (
                     <span className="text-5xl" aria-hidden="true">📦</span>
                   )}
                 </div>
+
+                {/* Contenido */}
                 <div className="flex flex-1 flex-col p-4">
-                  <h3 className="font-display font-bold leading-snug">{p.nombre}</h3>
-                  {p.subtitulo && <p className="text-sm font-semibold text-brand-yellow">{p.subtitulo}</p>}
+                  {/* Título + subtítulo: máx 2 líneas */}
+                  <h3 className="line-clamp-2 font-display text-sm font-bold leading-snug">
+                    {p.nombre}{p.subtitulo ? ` — ${p.subtitulo}` : ''}
+                  </h3>
+
+                  {/* Especificaciones: máx 3, truncadas */}
                   {p.especificaciones?.length > 0 && (
-                    <ul className="mt-2 space-y-0.5 text-xs text-gray-400">
-                      {p.especificaciones.slice(0, 3).map((e, i) => <li key={i}>• {e}</li>)}
+                    <ul className="mt-2 flex-1 space-y-0.5 overflow-hidden text-xs text-gray-400">
+                      {p.especificaciones.slice(0, 3).map((e, i) => (
+                        <li key={i} className="truncate">• {e}</li>
+                      ))}
                     </ul>
                   )}
-                  <span className="btn-yellow mt-4 justify-center py-2 text-sm">Ver más</span>
+
+                  {/* Botón siempre al fondo */}
+                  <span className="btn-yellow mt-auto justify-center py-2 text-sm">
+                    Ver más
+                  </span>
                 </div>
               </button>
             ))}
