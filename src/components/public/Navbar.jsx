@@ -21,9 +21,9 @@ export default function Navbar({ settings }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <span>📍 {settings?.direccion}</span>
           <div className="flex gap-6">
-            <span>📞 {settings?.telefono}</span>
-            <span>✉️ {settings?.email}</span>
-            <span>@{settings?.instagram}</span>
+            <a href={`tel:${settings?.telefono}`} className="transition hover:text-white">📞 {settings?.telefono}</a>
+            <a href={`mailto:${settings?.email}`} className="transition hover:text-white">✉️ {settings?.email}</a>
+            <a href={`https://instagram.com/${settings?.instagram}`} target="_blank" rel="noreferrer" className="transition hover:text-white">@{settings?.instagram}</a>
           </div>
         </div>
       </div>
