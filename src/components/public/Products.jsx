@@ -32,7 +32,13 @@ export default function Products({ settings }) {
 
   const cambiarFiltro = (id) => { setFiltro(id); setPagina(1); };
 
-  const visibles = filtro ? productos.filter((p) => p.categoria?._id === filtro) : productos;
+  const visibles = filtro
+    ? productos.filter((p) => p.categoria?._id === filtro)
+    : [...productos].sort((a, b) => {
+        const ai = categorias.findIndex((c) => c._id === a.categoria?._id);
+        const bi = categorias.findIndex((c) => c._id === b.categoria?._id);
+        return ai - bi;
+      });
   const totalPaginas = Math.ceil(visibles.length / porPagina);
   const paginados = visibles.slice((pagina - 1) * porPagina, pagina * porPagina);
 
