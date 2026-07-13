@@ -1,11 +1,11 @@
 const stats = [
   { valor: '+40', titulo: 'Años de experiencia', detalle: 'Desde 1983 brindando soluciones en impermeabilización.' },
-  { valor: '+2.500', titulo: 'Obras realizadas', detalle: 'Proyectos completados en todo el AMBA y la región.' },
+  { valor: '+15.000', titulo: 'Obras realizadas', detalle: 'Proyectos completados en todo el AMBA y la región.' },
   { valor: '★', titulo: 'Materiales premium', detalle: 'Trabajamos con las mejores marcas del mercado.' },
   { valor: '👷', titulo: 'Profesionales especializados', detalle: 'Equipo técnico capacitado para cada tipo de obra.' },
 ];
 
-const marcas = ['Sika', 'Megaflex', 'Weber', 'Danosa', 'Fester', 'Tersuave'];
+const marcas = ['Emapi', 'Megaflex'];
 
 export default function About() {
   return (
