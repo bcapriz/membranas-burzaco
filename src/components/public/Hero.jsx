@@ -43,6 +43,12 @@ export default function Hero({ settings }) {
         </div>
       </div>
 
+      <img
+        src="/img/warranty.png"
+        alt="Garantía en todos los trabajos"
+        className="absolute bottom-20 right-4 w-24 rotate-10 drop-shadow-[0_0_30px_rgba(234,179,8,0.35)] sm:w-32 md:bottom-16 md:right-8 md:w-44 lg:right-16 lg:w-52"
+      />
+
       {/* Franja de diferenciales */}
       <div className="relative border-t border-brand-border bg-black/60">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 py-5 md:grid-cols-4 md:gap-6 md:py-6">
