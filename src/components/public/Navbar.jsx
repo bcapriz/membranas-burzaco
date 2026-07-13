@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { waLink } from '../../api/client';
-import { WhatsAppIcon } from './Icons';
+import { WhatsAppIcon, InstagramIcon } from './Icons';
 
 const links = [
   { href: '#inicio', label: 'Inicio' },
@@ -23,7 +23,7 @@ export default function Navbar({ settings }) {
           <div className="flex gap-6">
             <a href={`tel:${settings?.telefono}`} className="transition hover:text-white">📞 {settings?.telefono}</a>
             <a href={`mailto:${settings?.email}`} className="transition hover:text-white">✉️ {settings?.email}</a>
-            <a href={`https://instagram.com/${settings?.instagram}`} target="_blank" rel="noreferrer" className="transition hover:text-white">@{settings?.instagram}</a>
+            <a href={`https://instagram.com/${settings?.instagram}`} target="_blank" rel="noreferrer" className="flex items-center gap-1 transition hover:text-white"><InstagramIcon className="h-3.5 w-3.5" />@{settings?.instagram}</a>
           </div>
         </div>
       </div>
